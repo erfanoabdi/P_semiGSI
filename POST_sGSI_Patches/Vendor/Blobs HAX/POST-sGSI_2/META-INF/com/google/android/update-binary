@@ -1,0 +1,166 @@
+#!/sbin/sh
+
+#####################################################
+# Flashize Runtime (2016-04-06)                     #
+# Copyright 2016, Lanchon                           #
+#####################################################
+
+#####################################################
+# The Flashize Runtime is free software licensed    #
+# under GNU's Lesser General Public License (LGPL)  #
+# version 3 and any later version.                  #
+# ------------------------------------------------- #
+# Note: The code appended to the Flashize Runtime,  #
+# if any, is independently licensed.                #
+#####################################################
+
+if [ "$1" != "lanchon-magic" ]; then
+    export FLASHIZE_VERSION='2016-04-06'
+    log=''
+    if [ -f /tmp/flashize-log ]; then
+        log="$(cat /tmp/flashize-log)"
+        if [ -z "$log" ]; then
+            log=/tmp/flashize.log
+        fi
+    fi
+    if [ "$log" == "-" ]; then
+        log=""
+    fi
+    out="/proc/self/fd/$2"
+    zip="$3"
+    if [ -n "$log" ]; then
+        if [ "${log::1}" != "/" ]; then
+            logzip="$zip"
+            if [ "$logzip" == "/tmp/update.zip" ] || [ "$logzip" == "/sideload/package.zip" ]; then
+                # if sideloading, for relative logfile naming purposes pretend that the zip is:
+                logzip=/tmp/flashize.zip
+            fi
+            if [ "$log" == ":" ]; then
+                log="$(basename "$logzip" .zip).log"
+            fi
+            log="$(dirname "$logzip")/$log"
+        fi
+        mkdir -p "$(dirname "$log")"
+    fi
+    print() {
+        local s="$1"
+        if [ -n "$log" ]; then
+            >>"$log" echo "$s"
+        fi
+        if [ -z "$s" ]; then s=" "; fi
+        >$out echo "ui_print $s"
+        >$out echo "ui_print"
+    }
+    print
+    if [ -n "$log" ]; then
+        >"$log"
+    fi
+    set -o pipefail
+    /sbin/sh "$0" "lanchon-magic" "$zip" 2>&1 | (
+        IFS=""
+        while read -r line; do print "$line"; done
+    )
+    code=$?
+    print
+    if [ "$code" -eq "0" ]; then
+        print "[OK]";
+    else
+        print "[ERROR $code]";
+    fi
+    log=""
+    print
+    exit $code
+fi
+shift
+[ ! -f /tmp/flashize-debug ] || set -x
+
+#####################################################
+
+#####################################################
+# Flashize-Ext Runtime (2016-04-06)                 #
+# Copyright 2016, Lanchon                           #
+#####################################################
+
+export FLASHIZE_EXT_VERSION='2016-04-06'
+mkdir -p '/tmp/flashize/' &&
+cd '/tmp/flashize/' &&
+unzip -o "$1" -d '/tmp/flashize/' >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+    >&2 echo "flashize-ext: unable to extract package contents"
+    exit 1
+fi
+[ ! -f /tmp/flashize-ext-debug ] && set +x || set -x
+
+#####################################################
+
+echo "8.1 to P Vendor Blobs Patcher by Erfan Abdi"
+echo "Make sure vendor is mounted before flashing this"
+
+#Global Vendor Patches
+
+#Disable PrivApp enforce
+sed -i 'ro.control_privapp_permissions=enforce/d' /vendor/build.prop
+
+#WIFI
+if ! grep -Fxq "android.hardware.wifi.hostapd" /vendor/manifest.xml
+then
+    wifirc=`grep -H -r "/vendor/bin/hw/wpa_supplicant" /vendor/etc/init/hw/* | cut -d: -f1`
+    sed -i "s|service wpa_supplicant /vendor/bin/hw/wpa_supplicant|service wpa_supplicant2 /vendor/bin/hw/wpa_supplicant2|g" $wifirc
+    sed -i "s|service vendor.wigig_supplicant /vendor/bin/hw/wpa_supplicant|service vendor.wigig_supplicant3 /vendor/bin/hw/wpa_supplicant3|g" $wifirc
+    sed -i -e '/<name>android.hardware.wifi<\/name>/ {' -e 'n;n; s/<version>1.1<\/version>/<version>1.2<\/version>/' -e '}' /vendor/manifest.xml
+    sed -i -e '/<name>android.hardware.wifi.supplicant<\/name>/ {' -e 'n;n; s/<version>1.0<\/version>/<version>1.1<\/version>/' -e '}' /vendor/manifest.xml
+    sed -i -e ':a' -e 'N' -e '$!ba' -e 's/<\/manifest>/    <hal format="hidl">\n        <name>android.hardware.wifi.hostapd<\/name>\n        <transport>hwbinder<\/transport>\n        <version>1.0<\/version>\n        <interface>\n            <name>IHostapd<\/name>\n            <instance>default<\/instance>\n        <\/interface>\n        <fqname>@1.0::IHostapd\/default<\/fqname>\n    <\/hal>\n<\/manifest>/g' /vendor/manifest.xml
+fi
+
+#NFC
+if [ -e "/vendor/etc/libnfc-brcm.conf" ]; then
+    mv /vendor/etc/libnfc-brcm.conf /vendor/etc/libnfc-nci.conf
+    sed -i '/APPL_TRACE_LEVEL/d' /vendor/etc/libnfc-nci.conf
+    sed -i '/PROTOCOL_TRACE_LEVEL/d' /vendor/etc/libnfc-nci.conf
+    sed -i '/MAX_RF_DATA_CREDITS/d' /vendor/etc/libnfc-nci.conf
+    echo "NFC_DEBUG_ENABLED=0" >> /vendor/etc/libnfc-nci.conf
+fi
+
+#GPS
+if [ -e "/vendor/lib/vendor.qti.gnss@1.0_vendor.so" ]; then
+    sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib/vendor.qti.gnss@1.0_vendor.so
+    sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib/vendor.qti.gnss@1.0.so
+fi
+sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib64/vendor.qti.gnss@1.0_vendor.so
+sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib64/vendor.qti.gnss@1.0.so
+if [ -e "/vendor/bin/slim_daemon" ]; then
+    sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/bin/slim_daemon
+    sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/bin/slim_daemon
+    rm -rf /vendor/bin/slim_daemon
+fi
+
+#Remove ims
+if [ -e "/vendor/app/ims/ims.apk" ]; then
+    rm -rf /vendor/app/ims
+fi
+
+#Cleanup overlays
+mv /vendor/overlay/framework-res__auto_generated_rro.apk /vendor/overlay/framework-res__auto_generated_rro.apk2
+rm -rf /vendor/overlay/*.apk
+mv /vendor/overlay/framework-res__auto_generated_rro.apk2 /vendor/overlay/framework-res__auto_generated_rro.apk
+
+#Xiaomi FP Patches
+fphal=`ls /vendor/bin/hw/android.hardware.biometrics.fingerprint*`
+if grep -Fxq "_ZN7android16IKeystoreService11asInterfaceERKNS_2spINS_7IBinderEEE" $fphal
+then
+    sed -i "s/libkeystore_binder.so/libWkeystorebinder.so/" $fphal
+fi
+
+#LG RIL
+if [ -e "/vendor/lib64/vendor.lge.hardware.radio@1.0.so" ]; then
+    sed -i "s/android.hardware.radio@1.0.so/Wndroid.hardware.radio@1.0.so/" /vendor/lib/vendor.lge.hardware.radio@1.0.so
+    sed -i "s/android.hardware.radio@1.0.so/Wndroid.hardware.radio@1.0.so/" /vendor/lib64/vendor.lge.hardware.radio@1.0.so
+fi
+
+#Moto RIL
+if [ -e "/vendor/lib64/libsensorndkbridge.so" ]; then
+    sed -i "s/android.hardware.sensors@1.0.so/Wndroid.hardware.sensors@1.0.so/" /vendor/lib/libsensorndkbridge.so
+    sed -i "s/android.hardware.sensors@1.0.so/Wndroid.hardware.sensors@1.0.so/" /vendor/lib64/libsensorndkbridge.so
+fi
+
+#Cam
