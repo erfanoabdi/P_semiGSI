@@ -168,4 +168,10 @@ fi
 #Motorola camera
 if [ -e "/vendor/lib/libjustshoot.so" ]; then
     sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libjustshoot.so
+    sed -i "s/libutils.so/libWtils.so/" /vendor/lib/libjustshoot.so
+fi
+if [ -e "/vendor/lib/libmot_gpu_mapper.so" ]; then
+    sed -i "s/libgui.so/libWui.so/" /vendor/lib/libmot_gpu_mapper.so
+    sed -i "s/libui.so/libWi.so/" /vendor/lib/libmot_gpu_mapper.so
+    sed -i "s/libutils.so/libWtils.so/" /vendor/lib/libmot_gpu_mapper.so
 fi
