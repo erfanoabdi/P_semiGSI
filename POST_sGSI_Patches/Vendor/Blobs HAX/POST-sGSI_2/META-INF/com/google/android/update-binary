@@ -164,3 +164,8 @@ if [ -e "/vendor/lib64/libsensorndkbridge.so" ]; then
 fi
 
 #Cam
+
+#Motorola camera
+if [ -e "/vendor/lib/libjustshoot.so" ]; then
+    sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libjustshoot.so
+fi
