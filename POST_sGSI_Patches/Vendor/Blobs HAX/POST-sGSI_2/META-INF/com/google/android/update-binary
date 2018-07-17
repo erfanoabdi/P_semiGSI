@@ -163,8 +163,6 @@ if [ -e "/vendor/lib64/libsensorndkbridge.so" ]; then
     sed -i "s/android.hardware.sensors@1.0.so/Wndroid.hardware.sensors@1.0.so/" /vendor/lib64/libsensorndkbridge.so
 fi
 
-#Cam
-
 #Motorola camera
 if [ -e "/vendor/lib/libjustshoot.so" ]; then
     sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libjustshoot.so
@@ -175,3 +173,13 @@ if [ -e "/vendor/lib/libmot_gpu_mapper.so" ]; then
     sed -i "s/libui.so/libWi.so/" /vendor/lib/libmot_gpu_mapper.so
     sed -i "s/libutils.so/libWtils.so/" /vendor/lib/libmot_gpu_mapper.so
 fi
+
+#Whyred camera
+if [ -e "/vendor/lib/libvidhance_gyro.so" ]; then
+    sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libvidhance_gyro.so
+fi
+if [ -e "/vendor/lib/libMiWatermark.so" ]; then
+    sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiWatermark.so
+    sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiWatermark.so
+fi
+
