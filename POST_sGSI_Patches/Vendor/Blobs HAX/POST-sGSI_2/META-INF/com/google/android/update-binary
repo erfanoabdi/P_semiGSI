@@ -179,7 +179,10 @@ if [ -e "/vendor/lib/libvidhance_gyro.so" ]; then
     sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libvidhance_gyro.so
 fi
 if [ -e "/vendor/lib/libMiWatermark.so" ]; then
-    sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiWatermark.so
-    sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiWatermark.so
+    if grep -Fxq "_ZN6icu_5811StringPieceC1EPKc" /vendor/lib/libMiWatermark.so
+    then
+        sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiWatermark.so
+        sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiWatermark.so
+    fi
 fi
 
