@@ -61,4 +61,11 @@ set_perm(0, 0, 0644, "/vendor/overlay/DisplayCutoutEmulationDouble/DisplayCutout
 set_perm(0, 0, 0644, "/vendor/overlay/DisplayCutoutEmulationTall/DisplayCutoutEmulationTallOverlay.apk");
 set_perm(0, 0, 0644, "/vendor/overlay/framework-res__auto_generated_rro.apk");
 
+if grep -Fxq "ro.vendor.product.model=ONEPLUS A5010" /vendor/build.prop; then
+  echo 'Found dumpling vendor! Pushing FP fix by p8tgames"
+  package_extract_dir("vendor_dumpling", "/vendor");
+  set_perm(0, 0, 0644, "/vendor/lib64/hw/fingerprint.qcom.so");
+
+
+
 ui_print("Installation complete!");
