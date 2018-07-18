@@ -184,5 +184,14 @@ if [ -e "/vendor/lib/libMiWatermark.so" ]; then
         sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiWatermark.so
         sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiWatermark.so
     fi
+  
+#Dumpling FP
+if grep -Fxq "dumpling" /vendor/build.prop; then 
+  echo "OnePlus 5t detected." 
+  echo "Renaming the fingerprint Hal (fix by p8tgames)" 
+  mv /vendor/lib64/hw/fingerprint.goodix.so /vendor/lib64/hw/fingerprint.qcom.so 
+echo "Done"
+fi
+
 fi
 
