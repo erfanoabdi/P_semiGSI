@@ -186,3 +186,8 @@ if [ -e "/vendor/lib/libMiWatermark.so" ]; then
     fi
 fi
 
+# Tissot and Sagit camera
+if [ -e "/vendor/lib/libMiCameraHal.so" ]; then
+    sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiCameraHal.so
+    sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiCameraHal.so
+fi
