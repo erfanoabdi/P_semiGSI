@@ -59,6 +59,7 @@ set_perm(0, 0, 0644, "/vendor/overlay/DisplayCutoutEmulationCorner/DisplayCutout
 set_perm(0, 0, 0644, "/vendor/overlay/Pixel/PixelThemeOverlay.apk");
 set_perm(0, 0, 0644, "/vendor/overlay/DisplayCutoutEmulationDouble/DisplayCutoutEmulationDoubleOverlay.apk");
 set_perm(0, 0, 0644, "/vendor/overlay/DisplayCutoutEmulationTall/DisplayCutoutEmulationTallOverlay.apk");
+set_perm(0, 0, 0644, "/vendor/overlay/SysuiDarkTheme/SysuiDarkThemeOverlay.apk");
 set_perm(0, 0, 0644, "/vendor/overlay/framework-res__auto_generated_rro.apk");
 
 ui_print("Installation complete!");
