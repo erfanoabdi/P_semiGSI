@@ -101,6 +101,12 @@ echo "Make sure vendor is mounted before flashing this"
 #Disable PrivApp enforce
 sed -i 'ro.control_privapp_permissions=enforce/d' /vendor/build.prop
 
+#we DO NOT support aio with ffs
+if ! grep -Fxq "sys.usb.ffs.aio_compat=1" /vendor/build.prop
+then
+    echo "sys.usb.ffs.aio_compat=1" >> /vendor/build.prop
+fi
+
 #WIFI
 if ! grep -Fxq "android.hardware.wifi.hostapd" /vendor/manifest.xml
 then
