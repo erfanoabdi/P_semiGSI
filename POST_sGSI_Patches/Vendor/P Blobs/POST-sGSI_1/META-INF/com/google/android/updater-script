@@ -50,7 +50,6 @@ set_perm(0, 0, 0644, "/vendor/lib/Wndroid.hardware.radio@1.0.so");
 set_perm(0, 0, 0644, "/vendor/lib/libWkeystorebinder.so");
 set_perm(0, 0, 0644, "/vendor/lib/Wndroid.hardware.sensors@1.0.so");
 set_perm(0, 0, 0644, "/vendor/lib64/Wndroid.hardware.sensors@1.0.so");
-set_perm(0, 0, 0644, "/vendor/app/QtiAudio/QtiAudio.apk");
 set_perm(0, 0, 0644, "/vendor/lib64/android.hardware.tetheroffload.control@1.0.so");
 set_perm(0, 0, 0644, "/vendor/lib64/android.hardware.tetheroffload.config@1.0.so");
 set_perm(0, 0, 0644, "/vendor/lib/android.hardware.tetheroffload.config@1.0.so");
