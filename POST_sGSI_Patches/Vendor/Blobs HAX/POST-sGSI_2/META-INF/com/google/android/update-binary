@@ -107,6 +107,11 @@ then
     echo "sys.usb.ffs.aio_compat=1" >> /vendor/build.prop
 fi
 
+if ! grep -Fxq "com.google.android.theme.pixel" /vendor/build.prop
+then
+    echo "ro.boot.vendor.overlay.theme=com.google.android.theme.pixel" >> /vendor/build.prop
+fi
+
 #WIFI
 if ! grep -Fxq "android.hardware.wifi.hostapd" /vendor/manifest.xml
 then
