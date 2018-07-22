@@ -96,12 +96,12 @@ fi
 echo "8.1 to P Vendor Blobs Patcher by Erfan Abdi"
 echo "Make sure vendor is mounted before flashing this"
 
-#Global Vendor Patches
+# Global Vendor Patches
 
-#Disable PrivApp enforce
+# Disable PrivApp enforce
 sed -i 'ro.control_privapp_permissions=enforce/d' /vendor/build.prop
 
-#we DO NOT support aio with ffs
+# we DO NOT support aio with ffs
 if ! grep -Fxq "sys.usb.ffs.aio_compat=1" /vendor/build.prop
 then
     echo "sys.usb.ffs.aio_compat=1" >> /vendor/build.prop
@@ -112,7 +112,7 @@ then
     echo "ro.boot.vendor.overlay.theme=com.google.android.theme.pixel" >> /vendor/build.prop
 fi
 
-#WIFI
+# WIFI
 if ! grep -Fxq "android.hardware.wifi.hostapd" /vendor/manifest.xml
 then
     wifirc=`grep -H -r "/vendor/bin/hw/wpa_supplicant" /vendor/etc/init/hw/* | cut -d: -f1`
@@ -123,7 +123,7 @@ then
     sed -i -e ':a' -e 'N' -e '$!ba' -e 's/<\/manifest>/    <hal format="hidl">\n        <name>android.hardware.wifi.hostapd<\/name>\n        <transport>hwbinder<\/transport>\n        <version>1.0<\/version>\n        <interface>\n            <name>IHostapd<\/name>\n            <instance>default<\/instance>\n        <\/interface>\n        <fqname>@1.0::IHostapd\/default<\/fqname>\n    <\/hal>\n<\/manifest>/g' /vendor/manifest.xml
 fi
 
-#NFC
+# NFC
 if [ -e "/vendor/etc/libnfc-brcm.conf" ]; then
     mv /vendor/etc/libnfc-brcm.conf /vendor/etc/libnfc-nci.conf
     sed -i '/APPL_TRACE_LEVEL/d' /vendor/etc/libnfc-nci.conf
@@ -132,7 +132,7 @@ if [ -e "/vendor/etc/libnfc-brcm.conf" ]; then
     echo "NFC_DEBUG_ENABLED=0" >> /vendor/etc/libnfc-nci.conf
 fi
 
-#GPS
+# GPS
 if [ -e "/vendor/lib/vendor.qti.gnss@1.0_vendor.so" ]; then
     sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib/vendor.qti.gnss@1.0_vendor.so
     sed -i "s/android.hardware.gnss@1.0.so/Wndroid.hardware.gnss@1.0.so/" /vendor/lib/vendor.qti.gnss@1.0.so
@@ -145,36 +145,36 @@ if [ -e "/vendor/bin/slim_daemon" ]; then
     rm -rf /vendor/bin/slim_daemon
 fi
 
-#Remove ims
+# Remove ims
 if [ -e "/vendor/app/ims/ims.apk" ]; then
     rm -rf /vendor/app/ims
 fi
 
-#Cleanup overlays
+# Cleanup overlays
 mv /vendor/overlay/framework-res__auto_generated_rro.apk /vendor/overlay/framework-res__auto_generated_rro.apk2
 rm -rf /vendor/overlay/*.apk
 mv /vendor/overlay/framework-res__auto_generated_rro.apk2 /vendor/overlay/framework-res__auto_generated_rro.apk
 
-#Xiaomi FP Patches
+# Xiaomi FP Patches
 fphal=`ls /vendor/bin/hw/android.hardware.biometrics.fingerprint*`
 if grep -Fxq "_ZN7android16IKeystoreService11asInterfaceERKNS_2spINS_7IBinderEEE" $fphal
 then
     sed -i "s/libkeystore_binder.so/libWkeystorebinder.so/" $fphal
 fi
 
-#LG RIL
+# LG RIL
 if [ -e "/vendor/lib64/vendor.lge.hardware.radio@1.0.so" ]; then
     sed -i "s/android.hardware.radio@1.0.so/Wndroid.hardware.radio@1.0.so/" /vendor/lib/vendor.lge.hardware.radio@1.0.so
     sed -i "s/android.hardware.radio@1.0.so/Wndroid.hardware.radio@1.0.so/" /vendor/lib64/vendor.lge.hardware.radio@1.0.so
 fi
 
-#Moto RIL
+# Moto RIL
 if [ -e "/vendor/lib64/libsensorndkbridge.so" ]; then
     sed -i "s/android.hardware.sensors@1.0.so/Wndroid.hardware.sensors@1.0.so/" /vendor/lib/libsensorndkbridge.so
     sed -i "s/android.hardware.sensors@1.0.so/Wndroid.hardware.sensors@1.0.so/" /vendor/lib64/libsensorndkbridge.so
 fi
 
-#Motorola camera
+# Motorola camera
 if [ -e "/vendor/lib/libjustshoot.so" ]; then
     sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libjustshoot.so
     sed -i "s/libutils.so/libWtils.so/" /vendor/lib/libjustshoot.so
@@ -188,7 +188,7 @@ if [ -e "/vendor/lib/libmot_gpu_mapper.so" ]; then
     sed -i "s/libutils.so/libWtils.so/" /vendor/lib/libmot_gpu_mapper.so
 fi
 
-#Whyred camera
+# Whyred camera
 if [ -e "/vendor/lib/libvidhance_gyro.so" ]; then
     sed -i "s/android.frameworks.sensorservice@1.0.so/Wndroid.frameworks.sensorservice@1.0.so/" /vendor/lib/libvidhance_gyro.so
 fi
