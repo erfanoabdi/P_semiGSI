@@ -149,6 +149,14 @@ fi
 if [ -e "/vendor/app/ims/ims.apk" ]; then
     rm -rf /vendor/app/ims
 fi
+if [ -e "/vendor/app/uceShimService/uceShimService.apk" ]; then
+rm -rf /vendor/app/uceShimService
+fi
+
+#Remove CNEService
+if [ -e "/vendor/app/CNEService/CNEService.apk" ]; then
+    rm -rf /vendor/app/CNEService
+fi
 
 #Cleanup overlays
 mv /vendor/overlay/framework-res__auto_generated_rro.apk /vendor/overlay/framework-res__auto_generated_rro.apk2
