@@ -213,3 +213,18 @@ if [ -e "/vendor/lib/libMiCameraHal.so" ]; then
     sed -i "s/libminikin.so/libWinikin.so/" /vendor/lib/libMiCameraHal.so
     sed -i "s/libicuuc.so/libWcuuc.so/" /vendor/lib/libMiCameraHal.so
 fi
+
+# OP5(t) fingerprint
+if [ -e "/sys/project_info/project_name" ]; then
+    device=`cat /sys/project_info/project_name`
+    if [[ $device = "17801" ]]; then
+        if [ -e "/sys/devices/soc/soc:fingerprint_detect/sensor_version" ]; then
+            fingerp=`cat /sys/devices/soc/soc:fingerprint_detect/sensor_version`
+            if [[ $fingerp = "3" ]]; then
+                mv /vendor/lib64/hw/fingerprint.goodix.so /vendor/lib64/hw/fingerprint.qcom.so
+            else
+                mv /vendor/lib64/hw/fingerprint.fpc.so /vendor/lib64/hw/fingerprint.qcom.so
+            fi
+        fi
+    fi
+fi
