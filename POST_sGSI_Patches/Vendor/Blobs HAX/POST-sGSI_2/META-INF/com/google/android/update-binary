@@ -228,3 +228,11 @@ if [ -e "/sys/project_info/project_name" ]; then
         fi
     fi
 fi
+
+# Payton Camera
+if [ -e "/vendor/lib/hw/camera.sdm660.so" ]; then
+    if grep -Fxq "_ZN7android9StopWatchC1EPKcij" /vendor/lib/hw/camera.sdm660.so
+    then
+        sed -i "s/libutils.so/libWtils.so/" /vendor/lib/hw/camera.sdm660.so
+    fi
+fi
