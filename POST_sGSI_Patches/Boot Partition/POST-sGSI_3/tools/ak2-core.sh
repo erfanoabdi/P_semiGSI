@@ -4,6 +4,7 @@ ramdisk=/tmp/anykernel/ramdisk;
 bin=/tmp/anykernel/tools;
 split_img=/tmp/anykernel/split_img;
 patch=/tmp/anykernel/patch;
+texts=/tmp/anykernel/texts;
 
 chmod -R 755 $bin;
 mkdir -p $split_img;
@@ -207,12 +208,8 @@ flash_boot() {
     if [ -f *-tagsoff ]; then
       tagsoff=`cat *-tagsoff`;
     fi;
-    if [ -f *-osversion ]; then
-      osver=`cat *-osversion`;
-    fi;
-    if [ -f *-oslevel ]; then
-      oslvl=`cat *-oslevel`;
-    fi;
+    osver=`cat $texts/osversion`;
+    oslvl=`cat $texts/oslevel`;
     if [ -f *-second ]; then
       second=`ls *-second`;
       second="--second $split_img/$second";
@@ -273,7 +270,7 @@ flash_boot() {
   elif [ -f "$bin/pxa-mkbootimg" ]; then
     $bin/pxa-mkbootimg --kernel $kernel --ramdisk $rd $second --cmdline "$cmdline androidboot.selinux=permissive" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff $secondoff --tags_offset "$tagsoff" --unknown $unknown $dtb --output boot-new.img;
   else
-    $bin/mkbootimg --kernel $kernel --ramdisk $rd $second --cmdline "$cmdline androidboot.selinux=permissive" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff $secondoff --tags_offset "$tagsoff" --os_version "9" --os_patch_level "2018-08-05" $hash $dtb --output boot-new.img;
+    $bin/mkbootimg --kernel $kernel --ramdisk $rd $second --cmdline "$cmdline androidboot.selinux=permissive" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff $secondoff --tags_offset "$tagsoff" --os_version "$osver" --os_patch_level "$oslvl" $hash $dtb --output boot-new.img;
   fi;
   if [ $? != 0 ]; then
     ui_print " "; ui_print "Repacking image failed. Aborting..."; exit 1;
