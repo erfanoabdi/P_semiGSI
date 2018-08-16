@@ -1,0 +1,7 @@
+etc/init/bufferhubd.rc
+etc/init/cppreopts.rc
+etc/init/performanced.rc
+etc/init/update_verifier.rc
+etc/init/virtual_touchpad.rc
+bin/update_verifier
+etc/permissions/com.google.android.camera.experimental2016.xml
