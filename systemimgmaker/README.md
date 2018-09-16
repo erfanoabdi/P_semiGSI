@@ -37,7 +37,6 @@ sudo ./sGSI-ify_ab.sh ~/AndroidWorkspace/system 2147483648 ~/AndroidWorkspace/sG
 ### and open another terminal tab (use python 2.x):
 ```
 cd ~/AndroidWorkspace/ROM_resigner
-
 sudo python resign.py ~/AndroidWorkspace/Capire-Le-Treble/Extra/tmp/system/system ~/AndroidWorkspace/android_build/target/product/security
 cd ~/AndroidWorkspace/P_semiGSI/systemimgmaker
 sudo ./makeab.sh ~/AndroidWorkspace/Capire-Le-Treble/Extra/tmp/system
