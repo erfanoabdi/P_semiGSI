@@ -16,7 +16,7 @@ git clone https://github.com/LineageOS/android_build.git
 ### A-Only:
 ```
 cd ~/AndroidWorkspace/Capire-Le-Treble/Extra
-sudo ./sGSI-ify.sh ~/AndroidWorkspace/system/system 2147483648 ~/AndroidWorkspace/sGSI_A.img
+sudo bash ./sGSI-ify.sh ~/AndroidWorkspace/system/system 2147483648 ~/AndroidWorkspace/sGSI_A.img
 <wait until you see "Press any key to continue">
 ```
 ### and open another terminal tab (use python 2.x):
@@ -31,7 +31,7 @@ sudo ./make.sh ~/AndroidWorkspace/Capire-Le-Treble/Extra/tmp/system
 ### AB:
 ```
 cd ~/AndroidWorkspace/Capire-Le-Treble/Extra
-sudo ./sGSI-ify_ab.sh ~/AndroidWorkspace/system 2147483648 ~/AndroidWorkspace/sGSI_AB.img
+sudo bash ./sGSI-ify_ab.sh ~/AndroidWorkspace/system 2147483648 ~/AndroidWorkspace/sGSI_AB.img
 <wait until you see "Press any key to continue">
 ```
 ### and open another terminal tab (use python 2.x):
