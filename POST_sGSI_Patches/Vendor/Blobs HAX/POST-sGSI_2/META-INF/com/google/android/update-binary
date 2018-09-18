@@ -107,9 +107,14 @@ then
     echo "sys.usb.ffs.aio_compat=1" >> /vendor/build.prop
 fi
 
+#setup P themes
 if ! grep -Fxq "com.google.android.theme.pixel" /vendor/build.prop
 then
     echo "ro.boot.vendor.overlay.theme=com.google.android.theme.pixel" >> /vendor/build.prop
+fi
+if ! grep -Fxq "persist.sys.overlay.photness" /vendor/build.prop
+then
+    echo "persist.sys.overlay.photness=true" >> /vendor/build.prop
 fi
 
 #WIFI
@@ -157,11 +162,6 @@ fi
 if [ -e "/vendor/app/CNEService/CNEService.apk" ]; then
     rm -rf /vendor/app/CNEService
 fi
-
-#Cleanup overlays
-mv /vendor/overlay/framework-res__auto_generated_rro.apk /vendor/overlay/framework-res__auto_generated_rro.apk2
-rm -rf /vendor/overlay/*.apk
-mv /vendor/overlay/framework-res__auto_generated_rro.apk2 /vendor/overlay/framework-res__auto_generated_rro.apk
 
 #Xiaomi FP Patches
 fphal=`ls /vendor/bin/hw/android.hardware.biometrics.fingerprint*`
