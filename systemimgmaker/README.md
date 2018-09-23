@@ -19,7 +19,7 @@ cd ~/AndroidWorkspace/Capire-Le-Treble/Extra
 sudo ./sGSI-ify.sh ~/AndroidWorkspace/system/system 2147483648 ~/AndroidWorkspace/sGSI_A.img
 <wait until you see "Press any key to continue">
 ```
-### and open another terminal tab (use python 2.x):
+### and open another terminal tab (use python 2.x and Java 8):
 ```
 cd ~/AndroidWorkspace/ROM_resigner
 sudo python resign.py ~/AndroidWorkspace/Capire-Le-Treble/Extra/tmp/system ~/AndroidWorkspace/android_build/target/product/security
@@ -34,7 +34,7 @@ cd ~/AndroidWorkspace/Capire-Le-Treble/Extra
 sudo ./sGSI-ify_ab.sh ~/AndroidWorkspace/system 2147483648 ~/AndroidWorkspace/sGSI_AB.img
 <wait until you see "Press any key to continue">
 ```
-### and open another terminal tab (use python 2.x):
+### and open another terminal tab (use python 2.x and Java 8):
 ```
 cd ~/AndroidWorkspace/ROM_resigner
 sudo python resign.py ~/AndroidWorkspace/Capire-Le-Treble/Extra/tmp/system/system ~/AndroidWorkspace/android_build/target/product/security
